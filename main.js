@@ -34,7 +34,8 @@ const DEFAULT_SETTINGS = {
 const uid     = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const pad     = n  => String(n).padStart(2, '0');
 const fmtDate = d  => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const fmtTime = s  => `${pad(Math.floor(s/60))}:${pad(s%60)}`;
+const fmtTime = s  => `${pad(Math.max(0, Math.floor(s/60)))}:${pad(Math.max(0, s%60))}`;
+const escapeHTML = str => String(str).replace(/[&<>'"]/g, tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag] || tag));
 
 function sendNotif(title, body) {
     try {
@@ -126,8 +127,8 @@ class OmniNoteView extends ItemView {
   <button class="omni-ghost-btn" id="oq-next"   title="حكمة أخرى">↻</button>
   <input type="file" id="oq-file" accept=".csv" style="display:none">
 </div>
-<p class="omni-q-text"   id="oq-text" style="font-size: ${this.S.quoteFontSize || 16}px">"${q.text}"</p>
-<p class="omni-q-author" id="oq-author" style="font-size: ${(this.S.quoteFontSize || 16) * 0.8}px">— ${q.author}</p>
+<p class="omni-q-text"   id="oq-text" style="font-size: ${this.S.quoteFontSize || 16}px">"${escapeHTML(q.text)}"</p>
+<p class="omni-q-author" id="oq-author" style="font-size: ${(this.S.quoteFontSize || 16) * 0.8}px">— ${escapeHTML(q.author)}</p>
 <div style="text-align: left; margin-top: 5px;">
   <button class="omni-ghost-btn" id="oq-font-inc" title="تكبير الخط" style="padding: 0 5px; font-size: 1.1em;">+</button>
   <button class="omni-ghost-btn" id="oq-font-dec" title="تصغير الخط" style="padding: 0 5px; font-size: 1.1em;">−</button>
@@ -146,7 +147,7 @@ class OmniNoteView extends ItemView {
         card.querySelector('#oq-next').onclick = () => {
             this.quoteIdx = (this.quoteIdx + 1) % Math.max(this.S.quotes.length, 1);
             const nq = this.S.quotes[this.quoteIdx] || { text: '...', author: '' };
-            card.querySelector('#oq-text').textContent   = `"${nq.text}"`;
+            card.querySelector('#oq-text').textContent   = `"${nq.text}"`; // textContent escapes naturally
             card.querySelector('#oq-author').textContent = `— ${nq.author}`;
         };
 
@@ -291,10 +292,14 @@ class OmniNoteView extends ItemView {
             this._activeNote = active?.basename || null;
             if (this._activeNote) { noteNm.textContent = this._activeNote; noteRow.style.display = 'flex'; }
 
+            const endTime = Date.now() + (this.timeRem * 1000);
             this.timerInt = setInterval(async () => {
-                if (this.timeRem > 0) { this.timeRem--; upd(); return; }
+                this.timeRem = Math.ceil((endTime - Date.now()) / 1000);
+                if (this.timeRem > 0) { upd(); return; }
+                this.timeRem = 0; upd();
                 await completeSession();
             }, 1000);
+            this.plugin.registerInterval(this.timerInt);
         };
 
         card.querySelector('#op-pause').onclick = () => {
@@ -432,9 +437,9 @@ class OmniNoteView extends ItemView {
         tasks.forEach(t => {
             const row = list.createDiv('omni-ctask-row');
             row.innerHTML = `
-<span class="omni-ctask-time">${t.time || ''}</span>
-<span class="omni-ctask-text">${t.text}</span>
-<button class="omni-ghost-btn omni-ctask-del" data-id="${t.id}">✕</button>`;
+<span class="omni-ctask-time">${escapeHTML(t.time || '')}</span>
+<span class="omni-ctask-text">${escapeHTML(t.text)}</span>
+<button class="omni-ghost-btn omni-ctask-del" data-id="${t.id}" title="حذف">🗑</button>`;
             row.querySelector('.omni-ctask-del').onclick = async () => {
                 this.S.calendarTasks[ds] =
                     (this.S.calendarTasks[ds] || []).filter(x => x.id !== t.id);
@@ -538,8 +543,8 @@ class OmniNoteView extends ItemView {
             const item = list.createDiv(`omni-prog-item${isDone ? ' omni-prog-done' : ''}`);
             item.innerHTML = `
 <div class="omni-prog-item-hd">
-  <span class="omni-prog-name-lbl">${task.name}</span>
-  <span class="omni-prog-units">${task.done}/${task.total} ${task.unit}</span>
+  <span class="omni-prog-name-lbl">${escapeHTML(task.name)}</span>
+  <span class="omni-prog-units">${escapeHTML(task.done)}/${escapeHTML(task.total)} ${escapeHTML(task.unit)}</span>
 </div>
 <div class="omni-prog-bar-wrap">
   <div class="omni-prog-bar" style="width:${pct}%"></div>
@@ -800,25 +805,25 @@ class OmniNotePlugin extends Plugin {
             if (await adapter.exists(filePath)) {
                 content = await adapter.read(filePath);
             } else {
-                content = `# إحصائيات يوم ${today}\n\n## سجل البومودورو\n| الوقت | الملاحظة | المدة | النوع |\n| :--- | :--- | :--- | :--- |\n`;
+                content = `# إحصائيات يوم ${today}\n\n`;
             }
             
             const timeStr = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-            const newRow = `| ${timeStr} | ${entry.note || 'بدون ملاحظة'} | ${entry.duration} دقيقة | ${entry.type === 'work' ? 'عمل' : 'استراحة'} |\n`;
+            const safeNote = escapeHTML(entry.note || 'بدون ملاحظة');
+            const newRow = `| ${timeStr} | ${safeNote} | ${entry.duration} دقيقة | ${entry.type === 'work' ? 'عمل' : 'استراحة'} |\n`;
             
-            // إضافة السطر الجديد في نهاية جدول البومودورو أو إنشاء جدول جديد إذا لم يوجد
+            const pomoHeader = "## سجل البومودورو\n| الوقت | الملاحظة | المدة | النوع |\n| :--- | :--- | :--- | :--- |\n";
             if (content.includes('## سجل البومودورو')) {
-                const parts = content.split('## سجل البومودورو');
-                const nextSectionIdx = parts[1].indexOf('\n##');
+                const nextSectionIdx = content.indexOf('\n## ', content.indexOf('## سجل البومودورو') + 5);
                 if (nextSectionIdx !== -1) {
-                    const beforeNext = parts[1].substring(0, nextSectionIdx);
-                    const afterNext = parts[1].substring(nextSectionIdx);
-                    content = parts[0] + '## سجل البومودورو' + beforeNext.replace(/\n+$/, '') + '\n' + newRow + afterNext;
+                    const before = content.substring(0, nextSectionIdx);
+                    const after = content.substring(nextSectionIdx);
+                    content = before.replace(/\n*$/, '') + '\n' + newRow + after;
                 } else {
-                    content = content.replace(/\n+$/, '') + '\n' + newRow;
+                    content = content.replace(/\n*$/, '') + '\n' + newRow;
                 }
             } else {
-                content += `\n\n## سجل البومودورو\n| الوقت | الملاحظة | المدة | النوع |\n| :--- | :--- | :--- | :--- |\n${newRow}`;
+                content += `\n${pomoHeader}${newRow}`;
             }
             
             await adapter.write(filePath, content);
@@ -856,20 +861,20 @@ class OmniNotePlugin extends Plugin {
             tasksToExport.forEach(t => {
                 const pct = Math.min(100, Math.round((t.done/Math.max(t.total, 1)) * 100));
                 const status = t.completed ? '✅ مكتملة' : '⏳ جارية';
-                taskSummary += `| ${t.name} | ${t.done}/${t.total} ${t.unit} | ${pct}% | ${status} |\n`;
+                taskSummary += `| ${escapeHTML(t.name)} | ${escapeHTML(t.done)}/${escapeHTML(t.total)} ${escapeHTML(t.unit)} | ${pct}% | ${status} |\n`;
             });
             
             const timeStr = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
             const sectionTitle = `## متابعة الإنجاز (تحديث: ${timeStr})\n\n`;
             
-            // استبدال قسم الإنجاز القديم بالجديد أو إضافته
-            if (content.includes('## متابعة الإنجاز')) {
-                const parts = content.split('## متابعة الإنجاز');
-                const nextSectionIdx = parts[1].indexOf('\n##');
-                const afterSection = nextSectionIdx !== -1 ? parts[1].substring(nextSectionIdx) : "";
-                content = parts[0].trim() + "\n\n" + sectionTitle + taskSummary + afterSection;
+            // Safe replacement using regex based on the ## title prefix
+            const progressRegex = /## متابعة الإنجاز(?:.*?\n)+?(?=\n## |\Z)/;
+            const fullSection = sectionTitle + taskSummary + "\n";
+            
+            if (progressRegex.test(content)) {
+                content = content.replace(progressRegex, fullSection);
             } else {
-                content = content.trim() + "\n\n" + sectionTitle + taskSummary;
+                content = content.replace(/\n*$/, '') + "\n\n" + fullSection;
             }
             
             await adapter.write(filePath, content);
@@ -882,12 +887,13 @@ class OmniNotePlugin extends Plugin {
     startQuoteTimer() {
         if (this._qTimer) clearInterval(this._qTimer);
         const ms = (this.settings.quoteInterval || 30) * 60 * 1000;
-        this._qTimer = setInterval(() => {
+        this._qTimer = window.setInterval(() => {
             const qs = this.settings.quotes;
             if (!qs.length) return;
             const q = qs[Math.floor(Math.random() * qs.length)];
-            sendNotif('💡 حكمة اليوم — OmniNote', `"${q.text}" — ${q.author}`);
+            sendNotif('💡 حكمة اليوم — OmniNote', `"${escapeHTML(q.text)}" — ${escapeHTML(q.author)}`);
         }, ms);
+        this.registerInterval(this._qTimer);
     }
     restartQuoteTimer() { this.startQuoteTimer(); }
 
@@ -895,7 +901,8 @@ class OmniNotePlugin extends Plugin {
     startNotifCheck() {
         if (this._nTimer) clearInterval(this._nTimer);
         this._doNotifCheck();
-        this._nTimer = setInterval(() => this._doNotifCheck(), 60 * 1000);
+        this._nTimer = window.setInterval(() => this._doNotifCheck(), 60 * 1000);
+        this.registerInterval(this._nTimer);
     }
 
     async _doNotifCheck() {
