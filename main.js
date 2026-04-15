@@ -65,9 +65,11 @@ function parseCSV(raw) {
     return results;
 }
 
-function sendNotif(title, body) {
+function sendNotif(title, body, hideAppNotice = false) {
     try {
-        new Notice(`${title} — ${body}`, 8000);
+        if (!hideAppNotice) {
+            new Notice(`${title} — ${body}`, 8000);
+        }
         if (typeof Notification === 'undefined') return;
         if (Notification.permission === 'granted') {
             new Notification(title, { body, silent: false });
@@ -782,7 +784,7 @@ class OmniNotePlugin extends Plugin {
         const ms = (this.settings.quoteInterval || 30) * 60 * 1000;
         this._qTimer = window.setInterval(async () => {
             const q = await this.advanceQuote();
-            sendNotif('💡 حكمة اليوم — OmniNote', `"${escapeHTML(q.text)}" — ${escapeHTML(q.author)}`);
+            sendNotif('💡 حكمة اليوم — OmniNote', `"${escapeHTML(q.text)}" — ${escapeHTML(q.author)}`, true);
         }, ms);
         this.registerInterval(this._qTimer);
     }
