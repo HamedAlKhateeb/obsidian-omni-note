@@ -373,8 +373,10 @@ class OmniNoteView extends ItemView {
                 await this.plugin.saveSettings();
                 card.querySelector('#oc-note-ta').value = '';
                 new Notice('تم مسح ملاحظة التقويم 🗑');
-                this._drawGrid(card); // لتحديث النقطة في التقويم إن لزم الأمر
             }
+            card.querySelector('#oc-panel').style.display = 'none';
+            this.selDate = null;
+            this._drawGrid(card);
         };
         card.querySelector('#oc-save').onclick = async () => {
             if (!this.selDate) return;
