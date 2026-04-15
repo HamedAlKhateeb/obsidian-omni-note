@@ -339,7 +339,10 @@ class OmniNoteView extends ItemView {
 <div class="omni-sticky-panel" id="oc-panel" style="display:none">
   <div class="omni-sticky-hd">
     <span class="omni-sticky-date" id="oc-date-lbl"></span>
-    <button class="omni-ghost-btn" id="oc-close">✕</button>
+    <div style="display: flex; gap: 4px; align-items: center;">
+      <button class="omni-ghost-btn omni-del-day-btn" id="oc-del-day" title="حذف كل المهام">🗑</button>
+      <button class="omni-ghost-btn" id="oc-close" title="إغلاق">✕</button>
+    </div>
   </div>
   <textarea class="omni-sticky-ta" id="oc-note-ta" placeholder="ملاحظة حرة..."></textarea>
   <div class="omni-task-list" id="oc-task-list"></div>
@@ -360,6 +363,17 @@ class OmniNoteView extends ItemView {
             this._drawGrid(card);
         };
         card.querySelector('#oc-close').onclick = () => {
+            card.querySelector('#oc-panel').style.display = 'none';
+            this.selDate = null; this._drawGrid(card);
+        };
+        card.querySelector('#oc-del-day').onclick = async () => {
+            if (!this.selDate) return;
+            if (this.S.calendarTasks[this.selDate] || this.S.stickyNotes[this.selDate]) {
+                delete this.S.calendarTasks[this.selDate];
+                delete this.S.stickyNotes[this.selDate];
+                await this.plugin.saveSettings();
+                new Notice('تم مسح ملاحظات ومهام هذا اليوم 🗑');
+            }
             card.querySelector('#oc-panel').style.display = 'none';
             this.selDate = null; this._drawGrid(card);
         };

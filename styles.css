@@ -374,6 +374,14 @@
   align-items: center;
   justify-content: space-between;
 }
+.omni-del-day-btn {
+  font-size: .95em;
+}
+.omni-del-day-btn:hover {
+  color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.1);
+  text-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
+}
 .omni-sticky-date {
   font-size: .77em;
   font-weight: 700;
