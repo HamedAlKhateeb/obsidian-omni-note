@@ -1,9 +1,9 @@
 {
     "id": "omni-note-extension",
     "name": "OmniNote Extension",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "minAppVersion": "0.15.0",
-    "description": "بومودورو + تقويم + متابعة الإنجاز + حكمة اليوم — شريط جانبي عربي متكامل لـ Obsidian",
+    "description": "An all-in-one sidebar for Obsidian: Pomodoro, Calendar, Progress Tracker, and Daily Quotes. (Bilingual: English & Arabic) | إضافة متكاملة لأوبسيديان تضم بومودورو، تقويم، متابعة الإنجاز، وحكمة اليوم",
     "author": "OmniNote",
     "authorUrl": "",
     "isDesktopOnly": true

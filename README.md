@@ -1,6 +1,7 @@
 <div align="center">
   <h1>🌟 OmniNote Extension for Obsidian</h1>
-  <p><strong>بومودورو + تقويم + متابعة الإنجاز + حكمة اليوم — شريط جانبي عربي متكامل لـ Obsidian!</strong></p>
+  <p><strong>Pomodoro, Calendar, Progress Tracker, and Daily Quotes in one powerful sidebar!</strong><br>
+  <strong>بومودورو + تقويم + متابعة الإنجاز + حكمة اليوم — شريط جانبي عربي/إنجليزي متكامل لـ Obsidian!</strong></p>
   
   ![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)
   ![Obsidian](https://img.shields.io/badge/Obsidian-0.15.0+-purple.svg)
@@ -9,60 +10,69 @@
 
 ---
 
-## 📖 عن الإضافة (About)
-**OmniNote (أومني نوت)** هي إضافة متكاملة (Sidebar Plugin) لمستخدمي أوبسيديان (Obsidian). مصممة خصيصاً لتوفير بيئة إنتاجية شاملة باللغة العربية داخل مساحة العمل الخاصة بك دون الحاجة للتنقل بين تطبيقات متعددة.
+## 📖 About (عن الإضافة)
+**OmniNote** is an all-in-one sidebar plugin for Obsidian. It is designed to provide a comprehensive productivity environment right inside your workspace without having to switch between multiple applications. **(Supports both English and Arabic interfaces)**
+
+**OmniNote (أومني نوت)** هي إضافة متكاملة (Sidebar Plugin) لمستخدمي أوبسيديان (Obsidian). مصممة خصيصاً لتوفير بيئة إنتاجية شاملة بلغات متعددة (يدعم العربية والإنجليزية) داخل مساحة العمل الخاصة بك.
 
 ---
 
-## ✨ الميزات الأساسية (Key Features)
+## ✨ Key Features (الميزات الأساسية)
 
-### 💡 1. حكمة اليوم (Daily Quotes)
-- عرض حكم واقتباسات ملهمة تتجدد باستمرار لتعزيز التحفيز.
-- إمكانية تكبير وتصغير خط الاقتباس ليتناسب مع تفضيلاتك.
-- إمكانية استيراد قائمة حكم مخصصة عبر ملفات `CSV`.
+### 💡 1. Daily Quotes (حكمة اليوم)
+- View inspiring daily quotes to boost motivation.
+- Customize the quote font size directly from the widget.
+- Import customized lists of quotes natively via `CSV` files.
+- **(عربي/Ar):** عرض حكم واقتباسات ملهمة للتحفيز المكتبي، مع إمكانية استيراد الاقتباسات من `CSV`.
 
-### ⏱️ 2. مؤقت بومودورو الذكي (Smart Pomodoro)
-- مؤقت متكامل لإدارة جلسات العمل الدقيقة وفترات الاستراحة.
-- **تخصيص كامل:** تعديل مدة جلسة التركيز والاستراحة مباشرة من الواجهة.
-- **تخطي سريع (Skip):** انتقال ذكي وسلس بين فترات العمل والاستراحة بضغطة زر.
-- **تكامل مع الملاحظات:** توثيق جلسات بومودورو المكتملة وإدراجها بذكاء داخل ملاحظتك النشطة حالياً.
-- **واجهة متكيفة:** يتغير لون حالة المؤقت ليتوافق تمامًا مع ثيم أوبسيديان الكلي (Accent Color).
+### ⏱️ 2. Smart Pomodoro (مؤقت بومودورو الذكي)
+- A seamlessly integrated Pomodoro timer for work and break intervals.
+- **Full Customization:** Adjust work/focus sessions and break durations directly via the UI.
+- **Fast Skip:** Smoothly transition between sessions via a specific skip button.
+- **Note Integration:** Automatic logging of finished tasks and pomodoro timers to the currently active markdown note.
+- **(عربي/Ar):** مؤقت متكامل، إمكانية تعديل المدد بسهولة، وتسجيل سجل جلسات تركيزك بالملاحظة النشطة.
 
-### 📅 3. التقويم وإدارة المهام (Calendar & Tasks)
-- تقويم شهري بتصميم عصري وأنيق.
-- إمكانية اختيار أي يوم وإضافة "ملاحظة اليوم" (Sticky Note) للرجوع إليها بسرعة.
-- جدول زمني متقدم لإضافة مهام، مواعيد، وأحداث محددة بوقت، مع خيار حذف المهام المنجزة.
-- **شارات بصرية (Badges):** مؤشرات تظهر على أيام التقويم لتوضيح عدد المهام المجدولة لكل يوم.
+### 📅 3. Calendar & Tasks (التقويم وإدارة المهام)
+- A modern mini calendar right in your sidebar.
+- Click any day to add a quick "Sticky Note" for that day.
+- A sophisticated scheduling engine to store targeted tasks or events.
+- visual badges indicate how many tasks are scheduled daily.
+- **(عربي/Ar):** تقويم أنيق مع إمكانية إضافة "ملاحظة حرة" و"مهام" مخصصة لكل يوم بالشارات البصرية.
 
-### 📊 4. متابعة الإنجاز (Progress Tracker)
-- نظام لتتبع الأهداف طويلة المدى والمهام الممتدة.
-- تحديد وحدات قياس مخصصة للتقدم (مثل: صفحة، دقيقة، درس، كتاب...).
-- أشرطة تقدم (Progress Bars) مرئية وتفاعلية توضح مستوى إنجازك لكل هدف لحظة بلحظة.
+### 📊 4. Progress Tracker (متابعة الإنجاز)
+- A dedicated long-term goals and progress tracking system.
+- Add milestones dynamically via custom targets (Pages, Minutes, Chapters, etc.).
+- Interactive progress bars and visual feedback keep you updated.
+- **(عربي/Ar):** نظام لتتبع الأهداف الممتدة وتخصيص وحدات قياس التقدم بشكل مرئي.
 
 ---
 
-## 🚀 التثبيت وطريقة الاستخدام (Installation)
+## 🚀 Installation (التثبيت)
 
-لتثبيت الإضافة يدوياً في القبو (Vault) الخاص بك:
-1. قم بتحميل أحدث إصدار من الإضافة.
-2. انسخ ملفات الإضافة (`main.js`، `manifest.json`، `styles.css`) إلى مسار الإضافات في قبو أوبسيديان الخاص بك:
+You can install this plugin manually in your Obsidian Vault:
+1. Download the latest release version.
+2. Extract the files (`main.js`, `manifest.json`, `styles.css`) into your plugin directory:
    ```bash
    YourVault/.obsidian/plugins/omni-note-extension/
    ```
-3. افتح إعدادات أوبسيديان (Settings) -> الإضافات المجتمعية (Community Plugins).
-4. أعد تحميل قائمة الإضافات، ثم قم بتفعيل **OmniNote Extension**.
-5. ستظهر لك أيقونة `OmniNote` في الشريط الجانبي الأيمن. انقر عليها لفتح لوحة التحكم وبدء الإنتاجية!
+3. Open Obsidian Settings -> Community Plugins.
+4. Reload the plugins listed, then enable **OmniNote Extension**.
+5. Click on the `OmniNote` ribbon icon on the left to open the sidebar panel. Enjoy your productivity!
+
+**(عربي/Ar):** يمكنك التثبيت يدوياً بوضع ملفات الإضافة في مسار: `YourVault/.obsidian/plugins/omni-note-extension/` وتفعيل الإضافة عبر إعدادات Obsidian. ثم اضغط على أيقونة الإضافة بالقائمة.
 
 ---
 
-## 🔄 التحديثات الأخيرة (What's New in v3.0.0)
-- 🎉 **ميزة التخطي:** إضافة زر مخصص لتخطي فترات بومودورو والانتقال للحالة التالية.
-- 🎨 **تحسينات واجهة المستخدم (UI/UX):** تحسين توافق الألوان ليتماشى تماماً مع السمة الافتراضية لأوبسيديان.
-- ⚙️ **إصلاحات عامة:** توافق أعلى برمجياً لضمان عمل الإشعارات الصوتية والانتقال التلقائي بسلاسة تامة.
+## 🔄 What's New in v3.0.0 (التحديثات الأخيرة)
+- 🌐 **Bilingual Support (دعم اللغات):** Fully translated UI. You can switch between Arabic and English via the plugin Settings.
+- 🎉 **Skip Feature (ميزة التخطي):** Introducing a new dedicated button to skip pomodoro intervals seamlessly.
+- 🎨 **UI/UX Refinements (تحسينات واجهة المستخدم):** Polished dynamic accent colors that blend perfectly with your current obsidian theme without visual clashing.
+- ⚙️ **Under-The-Hood fixes (إصلاحات عامة):** High programmatic reliability of milestone desktop notifications.
 
 ---
 
 <div align="center">
+  <b>Developed with love to optimize your time and boost productivity ❤️</b><br>
   <b>تم التطوير بحب لتنظيم وقتك وزيادة إنتاجيتك ❤️</b><br>
-  عن طريق <strong>Hamed Al-Khateeb</strong>
+  By <strong>Hamed Al-Khateeb</strong>
 </div>

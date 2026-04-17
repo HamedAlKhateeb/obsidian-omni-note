@@ -13,6 +13,7 @@ const DAYS_S = ['أح','اث','ثل','أر','خم','جم','سب'];
 const DAYS_F = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
 
 const DEFAULT_SETTINGS = {
+    language        : 'ar',
     workDuration    : 25,
     shortBreak      : 5,
     quoteInterval   : 30,
@@ -22,7 +23,7 @@ const DEFAULT_SETTINGS = {
     milestoneNotificationType: 'windows',
     milestoneMessages: {
         25: "ومن يتهيب صعود الجبال — يعش أبد الدهر بين الحفر",
-        50: "وما نيل المطالب بالتمني ـــ ولكن تُؤخذ الدنيا غِلابا\nوما استعصى على قومٍ منالٌ ـــ إذا الإقدام كان لهم ركابا",
+        50: "وما نيل المطالب بالتمني ـــ ولكن تُؤخذ الدنيا غِلابا\\nوما استعصى على قومٍ منالٌ ـــ إذا الإقدام كان لهم ركابا",
         75: "إذا غامرت في شرفٍ مرومِ — فلا تقنع بما دون النجوم",
        100: "ولم أرَ في عيوب الناس شيئًا — كنقص القادرين على التمام",
     },
@@ -32,6 +33,268 @@ const DEFAULT_SETTINGS = {
     progressTasks  : [],
     pomodoroLog    : [],
 };
+
+const locales = {
+    ar: {
+        quote_title: "حكمة اليوم",
+        pause_quote: "إيقاف تغيير الحكم",
+        resume_quote: "استئناف تغيير الحكم",
+        next_quote: "حكمة أخرى",
+        inc_font: "تكبير الخط",
+        dec_font: "تصغير الخط",
+        pomo_title: "بومودورو",
+        work: "عمل",
+        break: "استراحة",
+        start: "▶ ابدأ",
+        pause: "⏸ توقف",
+        reset: "↺ إعادة",
+        skip: "⏭ تخطي",
+        minutes: "دقيقة",
+        sessions_completed: "🔥 جلسات مكتملة:",
+        session_on: "📝 جلسة على:",
+        session_work_end: 'انتهت جلسة العمل على "$1"! استرح الآن 🎉',
+        session_break_end: "انتهت الاستراحة! وقت العمل 💪",
+        active_note: "الملاحظة",
+        cal_title: "التقويم",
+        delete_note: "حذف الملاحظة",
+        close: "إغلاق",
+        free_note: "ملاحظة حرة...",
+        add_task: "أضف مهمة...",
+        save: "💾 حفظ",
+        delete: "🗑",
+        delete_day_confirm: "تم مسح المهام والملاحظة كلياً 🗑",
+        save_confirm: "تم الحفظ ✓",
+        prog_title: "متابعة الإنجاز",
+        add_task_btn: "+",
+        task_name: "اسم المهمة",
+        type_steps: "🎯 خطوات",
+        type_value: "📖 قيمة",
+        type_time: "⏱️ وقت",
+        target: "الهدف",
+        unit: "وحدة القياس",
+        step_val: "مقدار الزيادة (اختياري)",
+        add_confirm: "إضافة ✓",
+        cancel: "إلغاء",
+        no_tasks: "لا توجد مهام بعد",
+        done: "✓",
+        manual_input: "✏️",
+        completed_tasks_sep: "— مكتملة —",
+        unit_default: "وحدة",
+        unit_pages: "صفحة / كلمة",
+        step_ph_time: "مقدار الزيادة (مثلاً 25)",
+        enter_task_name: "أدخل اسم المهمة",
+        target_gt_zero: "الهدف يجب أن يكون أكبر من صفر",
+        manual_input_title: "إدخال يدوي — $1",
+        manual_input_label: "أدخل التقدم الحالي ($1):",
+        completed_status: "✓ مكتمل — $1%",
+        settings_title: "⚙️ إعدادات OmniNote",
+        settings_lang: "اللغة / Language",
+        settings_lang_desc: "اختر لغة واجهة الإضافة (Choose the UI language)",
+        settings_pomo: "⏱️ البومودورو",
+        pomo_work_desc: "عدد الدقائق لكل جلسة عمل (١–١٢٠)",
+        pomo_break_desc: "عدد الدقائق للاستراحة القصيرة (١–٦٠)",
+        settings_quotes: "💡 الحكم والاقتباسات",
+        quote_interval: "فترة إشعار الحكمة",
+        quote_interval_desc: "كل كم دقيقة تظهر حكمة في إشعارات ويندوز وتتقدم في الويدجت معاً",
+        quote_total: "📊 إجمالي الحكم المحفوظة:",
+        quote_current: "🔖 الحكمة الحالية المعروضة: رقم",
+        quote_quotes: "حكمة",
+        quote_from: "من",
+        settings_import_export: "📂 استيراد / تصدير الحكم",
+        import_csv: "استيراد حكم من ملف CSV",
+        import_csv_desc: "تنسيق الملف: عمودان — نص الحكمة، ثم اسم الكاتب (يُضاف إلى القائمة الحالية)",
+        import_add: "📥 استيراد وإضافة",
+        import_replace: "🔄 استيراد واستبدال",
+        export_csv: "تصدير الحكم إلى ملف CSV",
+        export_csv_desc: "تنزيل جميع الحكم المحفوظة كملف CSV يمكن تعديله وإعادة استيراده",
+        export_btn: "📤 تصدير CSV",
+        export_empty: "لا توجد حكم للتصدير",
+        export_done: "✅ تم تصدير $1 حكمة",
+        settings_add_quote: "✍️ إضافة حكمة يدوياً",
+        quote_ph: "نص الحكمة...",
+        author_ph: "المؤلف (اختياري)...",
+        add_quote_btn: "+ إضافة الحكمة",
+        unknown_author: "مجهول",
+        empty_quote_text: "يرجى كتابة نص الحكمة",
+        quote_added: "✅ تمت إضافة الحكمة",
+        settings_quote_list: "📋 قائمة الحكم الحالية",
+        no_quotes_list: "لا توجد حكم محفوظة بعد. أضف حكماً يدوياً أو استورد من CSV.",
+        th_num: "#",
+        th_quote: "الحكمة",
+        th_author: "المؤلف",
+        th_actions: "إجراءات",
+        edit: "تعديل",
+        quote_edited: "✅ تم تعديل الحكمة",
+        quote_deleted: "تم حذف الحكمة",
+        settings_notifs: "🔔 الإشعارات",
+        milestone_enable: "تفعيل إشعارات Milestones",
+        milestone_enable_desc: "إظهار إشعار عند الوصول إلى 25% — 50% — 75% — 100% من أي مهمة",
+        milestone_src: "مصدر إشعارات Milestones",
+        milestone_src_desc: "حدد أين تود أن تظهر لك هذه الإشعارات؟",
+        src_win: "ويندوز (النظام) فقط",
+        src_obs: "أوبسيديان (داخلي) فقط",
+        src_both: "كلاهما (ويندوز + أوبسيديان)",
+        milestone_msgs: "💬 نصوص إشعارات الإنجاز المخصصة",
+        milestone_msg_at: "رسالة الإنجاز عند $1%",
+        settings_data_dir: "💾 مجلد البيانات",
+        data_dir_desc: "تُحفظ السجلات اليومية تلقائياً في:<br><code>$1/YYYY-MM-DD.md</code> داخل الـ vault",
+        file_no_quotes: "⚠️ لم يُعثر على حكم في الملف",
+        file_replaced: "✅ تم استبدال الحكم بـ $1 حكمة جديدة",
+        file_added: "✅ تم إضافة $1 حكمة جديدة",
+        file_error: "⚠️ خطأ في قراءة الملف",
+        notif_due_2h: "بعد ساعتين",
+        notif_due_12h: "بعد 12 ساعة",
+        notif_due_24h: "بعد 24 ساعة",
+        notif_reminder: "📅 تذكير — OmniNote",
+        notif_reminder_body: '"$1" مستحقة $2',
+        stats_header: "إحصائيات يوم",
+        pomo_log_header: "## سجل البومودورو\\n| الوقت | الملاحظة | المدة | النوع |\\n| :--- | :--- | :--- | :--- |\\n",
+        no_note: "بدون ملاحظة",
+        prog_header: "## متابعة الإنجاز (تحديث: $1)\\n\\n",
+        prog_log_header: "| المهمة | الإنجاز | النسبة | الحالة |\\n| :--- | :--- | :--- | :--- |\\n",
+        status_done: "✅ مكتملة",
+        status_running: "⏳ جارية",
+        milestone_notif_title: "📊 OmniNote — $1 ($2%)",
+        milestone_reached: "وصلت إلى $1%",
+        confirm_btn: "✓ تأكيد"
+    },
+    en: {
+        quote_title: "Daily Quote",
+        pause_quote: "Pause Quotes",
+        resume_quote: "Resume Quotes",
+        next_quote: "Next Quote",
+        inc_font: "Increase Font",
+        dec_font: "Decrease Font",
+        pomo_title: "Pomodoro",
+        work: "Work",
+        break: "Break",
+        start: "▶ Start",
+        pause: "⏸ Pause",
+        reset: "↺ Reset",
+        skip: "⏭ Skip",
+        minutes: "min",
+        sessions_completed: "🔥 Sessions:",
+        session_on: "📝 Note:",
+        session_work_end: 'Work session on "$1" ended! Take a break 🎉',
+        session_break_end: "Break ended! Time to work 💪",
+        active_note: "Note",
+        cal_title: "Calendar",
+        delete_note: "Delete Note",
+        close: "Close",
+        free_note: "Free note...",
+        add_task: "Add task...",
+        save: "💾 Save",
+        delete: "🗑",
+        delete_day_confirm: "Tasks and notes completely deleted 🗑",
+        save_confirm: "Saved ✓",
+        prog_title: "Progress Tracker",
+        add_task_btn: "+",
+        task_name: "Task Name",
+        type_steps: "🎯 Steps",
+        type_value: "📖 Value",
+        type_time: "⏱️ Time",
+        target: "Target",
+        unit: "Unit",
+        step_val: "Step value (optional)",
+        add_confirm: "Add ✓",
+        cancel: "Cancel",
+        no_tasks: "No tasks yet",
+        done: "✓",
+        manual_input: "✏️",
+        completed_tasks_sep: "— Completed —",
+        unit_default: "unit",
+        unit_pages: "page / word",
+        step_ph_time: "Step value (e.g. 25)",
+        enter_task_name: "Enter task name",
+        target_gt_zero: "Target must be greater than zero",
+        manual_input_title: "Manual Input — $1",
+        manual_input_label: "Enter progress ($1):",
+        completed_status: "✓ Done — $1%",
+        settings_title: "⚙️ OmniNote Settings",
+        settings_lang: "Language / اللغة",
+        settings_lang_desc: "Choose the UI language (اختر لغة واجهة الإضافة)",
+        settings_pomo: "⏱️ Pomodoro",
+        pomo_work_desc: "Duration for each work session (1–120 mins)",
+        pomo_break_desc: "Duration for short breaks (1–60 mins)",
+        settings_quotes: "💡 Quotes",
+        quote_interval: "Quote Notification Interval",
+        quote_interval_desc: "Minutes between Windows notifications and widget quote rotations",
+        quote_total: "📊 Total saved quotes:",
+        quote_current: "🔖 Current displayed quote: number",
+        quote_quotes: "quotes",
+        quote_from: "out of",
+        settings_import_export: "📂 Import Quotes",
+        import_csv: "Import from CSV",
+        import_csv_desc: "Format: Two columns — Quote text, then Author name",
+        import_add: "📥 Import & Add",
+        import_replace: "🔄 Import & Replace",
+        export_csv: "Export Quotes to CSV",
+        export_csv_desc: "Download all saved quotes to CSV",
+        export_btn: "📤 Export CSV",
+        export_empty: "No quotes to export",
+        export_done: "✅ Exported $1 quotes",
+        settings_add_quote: "✍️ Add Quote Manually",
+        quote_ph: "Quote text...",
+        author_ph: "Author (optional)...",
+        add_quote_btn: "+ Add Quote",
+        unknown_author: "Unknown",
+        empty_quote_text: "Please enter quote text",
+        quote_added: "✅ Quote added",
+        settings_quote_list: "📋 Current Quotes",
+        no_quotes_list: "No saved quotes yet.",
+        th_num: "#",
+        th_quote: "Quote",
+        th_author: "Author",
+        th_actions: "Actions",
+        edit: "Edit",
+        quote_edited: "✅ Quote edited",
+        quote_deleted: "Quote deleted",
+        settings_notifs: "🔔 Notifications",
+        milestone_enable: "Enable Milestone Notifications",
+        milestone_enable_desc: "Show notification when reaching 25% — 50% — 75% — 100% of any task",
+        milestone_src: "Notification Source",
+        milestone_src_desc: "Where should notifications appear?",
+        src_win: "Windows only",
+        src_obs: "Obsidian only",
+        src_both: "Both (Windows & Obsidian)",
+        milestone_msgs: "💬 Custom Milestone Messages",
+        milestone_msg_at: "Message at $1%",
+        settings_data_dir: "💾 Data Directory",
+        data_dir_desc: "Daily logs are saved automatically in:<br><code>$1/YYYY-MM-DD.md</code>",
+        file_no_quotes: "⚠️ No quotes found in file",
+        file_replaced: "✅ Replaced with $1 new quotes",
+        file_added: "✅ Added $1 new quotes",
+        file_error: "⚠️ Error reading file",
+        notif_due_2h: "in 2 hours",
+        notif_due_12h: "in 12 hours",
+        notif_due_24h: "in 24 hours",
+        notif_reminder: "📅 Reminder — OmniNote",
+        notif_reminder_body: '"$1" is due $2',
+        stats_header: "Stats for",
+        pomo_log_header: "## Pomodoro Log\\n| Time | Note | Duration | Type |\\n| :--- | :--- | :--- | :--- |\\n",
+        no_note: "No note",
+        prog_header: "## Progress Tracker (Updated: $1)\\n\\n",
+        prog_log_header: "| Task | Progress | Percentage | Status |\\n| :--- | :--- | :--- | :--- |\\n",
+        status_done: "✅ Done",
+        status_running: "⏳ Running",
+        milestone_notif_title: "📊 OmniNote — $1 ($2%)",
+        milestone_reached: "Reached $1%",
+        confirm_btn: "✓ Confirm"
+    }
+};
+
+let currentLang = 'ar';
+function setTranslationsLang(lang) {
+    if (locales[lang]) currentLang = lang;
+}
+
+function t(key, ...args) {
+    let str = locales[currentLang][key] || key;
+    args.forEach((arg, i) => {
+        str = str.replace('$' + (i + 1), arg);
+    });
+    return str;
+}
 
 // ═══════════════════════════════════════════════════════════
 //  مساعدات
@@ -129,10 +392,10 @@ class OmniInputModal extends Modal {
         inp.select();
         const btns = contentEl.createDiv();
         btns.style.cssText = 'display:flex;gap:8px;margin-top:12px;justify-content:flex-end;';
-        const ok = btns.createEl('button', { text: '✓ تأكيد' });
+        const ok = btns.createEl('button', { text: t('confirm_btn') });
         ok.classList.add('mod-cta');
         ok.style.cssText = 'padding:6px 18px;cursor:pointer;';
-        const cancel = btns.createEl('button', { text: 'إلغاء' });
+        const cancel = btns.createEl('button', { text: t('cancel') });
         cancel.style.cssText = 'padding:6px 18px;cursor:pointer;';
         const submit = () => { this._onSubmit(inp.value); this.close(); };
         ok.onclick = submit;
@@ -193,15 +456,15 @@ class OmniNoteView extends ItemView {
         card.innerHTML = `
 <div class="omni-card-hd">
   <span class="omni-card-ico">💡</span>
-  <span class="omni-card-ttl">حكمة اليوم</span>
-  <button class="omni-ghost-btn" id="oq-pause" title="${this.S.isQuotePaused ? 'استئناف تغيير الحكم' : 'إيقاف تغيير الحكم'}">${this.S.isQuotePaused ? '▶️' : '⏸️'}</button>
-  <button class="omni-ghost-btn" id="oq-next" title="حكمة أخرى">↻</button>
+  <span class="omni-card-ttl">${t('quote_title')}</span>
+  <button class="omni-ghost-btn" id="oq-pause" title="${this.S.isQuotePaused ? t('resume_quote') : t('pause_quote')}">${this.S.isQuotePaused ? '▶️' : '⏸️'}</button>
+  <button class="omni-ghost-btn" id="oq-next" title="${t('next_quote')}">↻</button>
 </div>
 <p class="omni-q-text"   id="oq-text"   style="font-size: ${this.S.quoteFontSize || 16}px">"${escapeHTML(q.text)}"</p>
 <p class="omni-q-author" id="oq-author" style="font-size: ${(this.S.quoteFontSize || 16) * 0.8}px">— ${escapeHTML(q.author)}</p>
 <div style="text-align: left; margin-top: 5px;">
-  <button class="omni-ghost-btn" id="oq-font-inc" title="تكبير الخط"  style="padding: 0 5px; font-size: 1.1em;">+</button>
-  <button class="omni-ghost-btn" id="oq-font-dec" title="تصغير الخط" style="padding: 0 5px; font-size: 1.1em;">−</button>
+  <button class="omni-ghost-btn" id="oq-font-inc" title="${t('inc_font')}"  style="padding: 0 5px; font-size: 1.1em;">+</button>
+  <button class="omni-ghost-btn" id="oq-font-dec" title="${t('dec_font')}" style="padding: 0 5px; font-size: 1.1em;">−</button>
 </div>`;
 
         const updateFont = async (d) => {
@@ -218,7 +481,7 @@ class OmniNoteView extends ItemView {
             this.S.isQuotePaused = !this.S.isQuotePaused;
             await this.plugin.saveSettings();
             toggleBtn.textContent = this.S.isQuotePaused ? '▶️' : '⏸️';
-            toggleBtn.title = this.S.isQuotePaused ? 'استئناف تغيير الحكم' : 'إيقاف تغيير الحكم';
+            toggleBtn.title = this.S.isQuotePaused ? t('resume_quote') : t('pause_quote');
         };
 
         card.querySelector('#oq-next').onclick = async () => {
@@ -245,43 +508,43 @@ class OmniNoteView extends ItemView {
         card.innerHTML = `
 <div class="omni-card-hd">
   <span class="omni-card-ico">⏱️</span>
-  <span class="omni-card-ttl">بومودورو</span>
-  <span class="omni-mode-badge" id="op-badge">عمل</span>
+  <span class="omni-card-ttl">${t('pomo_title')}</span>
+  <span class="omni-mode-badge" id="op-badge">${t('work')}</span>
 </div>
 <div class="omni-timer" id="op-timer">${fmtTime(this.timeRem)}</div>
 <div class="omni-pomo-center">
   <div class="omni-pomo-btns">
-    <button class="omni-btn omni-btn-accent" id="op-start">▶ ابدأ</button>
-    <button class="omni-btn omni-btn-muted"  id="op-pause">⏸ توقف</button>
-    <button class="omni-btn omni-btn-ghost"  id="op-reset">↺ إعادة</button>
-    <button class="omni-btn omni-btn-ghost"  id="op-skip">⏭ تخطي</button>
+    <button class="omni-btn omni-btn-accent" id="op-start">${t('start')}</button>
+    <button class="omni-btn omni-btn-muted"  id="op-pause">${t('pause')}</button>
+    <button class="omni-btn omni-btn-ghost"  id="op-reset">${t('reset')}</button>
+    <button class="omni-btn omni-btn-ghost"  id="op-skip">${t('skip')}</button>
   </div>
   <div class="omni-dur-row">
     <div class="omni-dur-lbl">
-      <span>عمل</span>
+      <span>${t('work')}</span>
       <div class="omni-stepper">
         <button class="omni-step-btn" id="op-wd">−</button>
         <input  class="omni-dur-inp" type="number" id="op-wi"
                 value="${this.S.workDuration}" min="1" max="120">
         <button class="omni-step-btn" id="op-wi2">+</button>
       </div>
-      <span>دقيقة</span>
+      <span>${t('minutes')}</span>
     </div>
     <div class="omni-dur-lbl">
-      <span>استراحة</span>
+      <span>${t('break')}</span>
       <div class="omni-stepper">
         <button class="omni-step-btn" id="op-bd">−</button>
         <input  class="omni-dur-inp" type="number" id="op-bi"
                 value="${this.S.shortBreak}" min="1" max="60">
         <button class="omni-step-btn" id="op-bi2">+</button>
       </div>
-      <span>دقيقة</span>
+      <span>${t('minutes')}</span>
     </div>
   </div>
-  <div class="omni-sessions-row">🔥 جلسات مكتملة: <strong id="op-sessions">0</strong></div>
+  <div class="omni-sessions-row">${t('sessions_completed')} <strong id="op-sessions">0</strong></div>
 </div>
 <div class="omni-note-row" id="op-note-row" style="display:none">
-  📝 جلسة على: <span id="op-note-name" class="omni-note-chip"></span>
+  ${t('session_on')} <span id="op-note-name" class="omni-note-chip"></span>
 </div>`;
 
         const disp    = card.querySelector('#op-timer');
@@ -345,15 +608,15 @@ class OmniNoteView extends ItemView {
                 }
                 this.isBreak = true;
                 this.timeRem = this.S.shortBreak * 60;
-                badge.textContent = 'استراحة';
+                badge.textContent = t('break');
                 badge.classList.add('omni-break');
-                sendNotif('OmniNote ⏱️', `انتهت جلسة العمل على "${this._activeNote || 'الملاحظة'}"! استرح الآن 🎉`);
+                sendNotif('OmniNote ⏱️', t('session_work_end', this._activeNote || t('active_note')));
             } else {
                 this.isBreak = false;
                 this.timeRem = this.S.workDuration * 60;
-                badge.textContent = 'عمل'; badge.classList.remove('omni-break');
+                badge.textContent = t('work'); badge.classList.remove('omni-break');
                 noteRow.style.display = 'none';
-                sendNotif('OmniNote ⏱️', 'انتهت الاستراحة! وقت العمل 💪');
+                sendNotif('OmniNote ⏱️', t('session_break_end'));
             }
             upd();
         };
@@ -377,7 +640,7 @@ class OmniNoteView extends ItemView {
         card.querySelector('#op-reset').onclick = () => {
             clearInterval(this.timerInt); this.timerInt = null;
             this.isBreak = false; this.timeRem = this.S.workDuration * 60;
-            badge.textContent = 'عمل'; badge.classList.remove('omni-break');
+            badge.textContent = t('work'); badge.classList.remove('omni-break');
             noteRow.style.display = 'none'; upd();
         };
     }
@@ -390,7 +653,7 @@ class OmniNoteView extends ItemView {
         card.innerHTML = `
 <div class="omni-card-hd">
   <span class="omni-card-ico">📅</span>
-  <span class="omni-card-ttl">التقويم</span>
+  <span class="omni-card-ttl">${t('cal_title')}</span>
 </div>
 <div class="omni-cal-nav">
   <button class="omni-ghost-btn" id="oc-prev">‹</button>
@@ -402,18 +665,18 @@ class OmniNoteView extends ItemView {
   <div class="omni-sticky-hd">
     <span class="omni-sticky-date" id="oc-date-lbl"></span>
     <div style="display: flex; gap: 4px; align-items: center;">
-      <button class="omni-ghost-btn omni-del-day-btn" id="oc-del-day" title="حذف الملاحظة">🗑</button>
-      <button class="omni-ghost-btn" id="oc-close" title="إغلاق">✕</button>
+      <button class="omni-ghost-btn omni-del-day-btn" id="oc-del-day" title="${t('delete_note')}">${t('delete')}</button>
+      <button class="omni-ghost-btn" id="oc-close" title="${t('close')}">✕</button>
     </div>
   </div>
-  <textarea class="omni-sticky-ta" id="oc-note-ta" placeholder="ملاحظة حرة..."></textarea>
+  <textarea class="omni-sticky-ta" id="oc-note-ta" placeholder="${t('free_note')}"></textarea>
   <div class="omni-task-list" id="oc-task-list"></div>
   <div class="omni-task-add-row">
-    <input type="text"  class="omni-field omni-task-inp"  id="oc-task-txt"  placeholder="أضف مهمة...">
+    <input type="text"  class="omni-field omni-task-inp"  id="oc-task-txt"  placeholder="${t('add_task')}">
     <input type="time"  class="omni-field omni-time-inp"  id="oc-task-time" value="09:00">
     <button class="omni-btn omni-btn-accent omni-add-task-btn" id="oc-task-add">+</button>
   </div>
-  <button class="omni-btn omni-btn-accent omni-sticky-save-btn" id="oc-save">💾 حفظ</button>
+  <button class="omni-btn omni-btn-accent omni-sticky-save-btn" id="oc-save">${t('save')}</button>
 </div>`;
 
         card.querySelector('#oc-prev').onclick = () => { this.viewDate.setMonth(this.viewDate.getMonth()-1); this._drawGrid(card); };
@@ -425,7 +688,7 @@ class OmniNoteView extends ItemView {
             delete this.S.calendarTasks[this.selDate];
             card.querySelector('#oc-note-ta').value = '';
             await this.plugin.saveSettings();
-            new Notice('تم مسح المهام والملاحظة كلياً 🗑');
+            new Notice(t('delete_day_confirm'));
             card.querySelector('#oc-panel').style.display = 'none';
             this.selDate = null; this._drawGrid(card);
         };
@@ -436,7 +699,7 @@ class OmniNoteView extends ItemView {
             else     delete this.S.stickyNotes[this.selDate];
             await this.plugin.saveSettings();
             this._drawGrid(card);
-            new Notice('تم الحفظ ✓');
+            new Notice(t('save_confirm'));
         };
         card.querySelector('#oc-task-add').onclick    = () => this._addTask(card);
         card.querySelector('#oc-task-txt').onkeypress = e => { if (e.key==='Enter') this._addTask(card); };
@@ -511,7 +774,7 @@ class OmniNoteView extends ItemView {
             row.innerHTML = `
 <span class="omni-ctask-time">${escapeHTML(timeDisplay)}</span>
 <span class="omni-ctask-text">${escapeHTML(t.text)}</span>
-<button class="omni-ghost-btn omni-ctask-del" data-id="${t.id}" title="حذف">🗑</button>`;
+<button class="omni-ghost-btn omni-ctask-del" data-id="${t.id}" title="${t('delete')}">${t('delete')}</button>`;
             row.querySelector('.omni-ctask-del').onclick = async () => {
                 this.S.calendarTasks[ds] = (this.S.calendarTasks[ds]||[]).filter(x=>x.id!==t.id);
                 if (!this.S.calendarTasks[ds].length) delete this.S.calendarTasks[ds];
@@ -542,28 +805,28 @@ class OmniNoteView extends ItemView {
         card.innerHTML = `
 <div class="omni-card-hd">
   <span class="omni-card-ico">📊</span>
-  <span class="omni-card-ttl">متابعة الإنجاز</span>
-  <button class="omni-ghost-btn" id="opr-add-btn" title="إضافة مهمة">+</button>
+  <span class="omni-card-ttl">${t('prog_title')}</span>
+  <button class="omni-ghost-btn" id="opr-add-btn" title="${t('add_task_btn')}">+</button>
 </div>
 <div class="omni-prog-form" id="opr-form" style="display:none">
-  <input type="text" class="omni-field" id="opr-name" placeholder="اسم المهمة">
+  <input type="text" class="omni-field" id="opr-name" placeholder="${t('task_name')}">
   <div class="omni-prog-form-row">
     <select class="omni-field omni-field-sm" id="opr-type">
-      <option value="steps">🎯 خطوات</option>
-      <option value="value">📖 قيمة</option>
-      <option value="time">⏱️ وقت</option>
+      <option value="steps">${t('type_steps')}</option>
+      <option value="value">${t('type_value')}</option>
+      <option value="time">${t('type_time')}</option>
     </select>
   </div>
   <div class="omni-prog-form-row">
-    <input type="number" class="omni-field omni-field-sm" id="opr-total" placeholder="الهدف" min="1" value="">
-    <input type="text"   class="omni-field omni-field-sm" id="opr-unit"  placeholder="وحدة القياس">
+    <input type="number" class="omni-field omni-field-sm" id="opr-total" placeholder="${t('target')}" min="1" value="">
+    <input type="text"   class="omni-field omni-field-sm" id="opr-unit"  placeholder="${t('unit')}">
   </div>
   <div class="omni-prog-form-row">
-    <input type="number" class="omni-field omni-field-sm" id="opr-step" placeholder="مقدار الزيادة (اختياري)" min="1" value="">
+    <input type="number" class="omni-field omni-field-sm" id="opr-step" placeholder="${t('step_val')}" min="1" value="">
   </div>
   <div class="omni-prog-form-btns">
-    <button class="omni-btn omni-btn-accent" id="opr-submit">إضافة ✓</button>
-    <button class="omni-btn omni-btn-ghost"  id="opr-cancel">إلغاء</button>
+    <button class="omni-btn omni-btn-accent" id="opr-submit">${t('add_confirm')}</button>
+    <button class="omni-btn omni-btn-ghost"  id="opr-cancel">${t('cancel')}</button>
   </div>
 </div>
 <div class="omni-prog-list" id="opr-list"></div>`;
@@ -580,11 +843,11 @@ class OmniNoteView extends ItemView {
             const unitInp = card.querySelector('#opr-unit');
             const stepInp = card.querySelector('#opr-step');
             if (e.target.value === 'time') {
-                unitInp.placeholder = 'دقيقة';
-                stepInp.placeholder = 'مقدار الزيادة (مثلاً 25)';
+                unitInp.placeholder = t('minutes');
+                stepInp.placeholder = t('step_ph_time');
             } else if (e.target.value === 'value') {
-                unitInp.placeholder = 'صفحة / كلمة';
-                stepInp.placeholder = 'مقدار الزيادة (اختياري)';
+                unitInp.placeholder = t('unit_pages');
+                stepInp.placeholder = t('step_val');
             } else {
                 unitInp.placeholder = 'وحدة القياس';
                 stepInp.placeholder = 'مقدار الزيادة (اختياري)';
@@ -595,10 +858,10 @@ class OmniNoteView extends ItemView {
             const name  = card.querySelector('#opr-name').value.trim();
             const type  = card.querySelector('#opr-type').value;
             const total = parseInt(card.querySelector('#opr-total').value) || 1;
-            const unit  = card.querySelector('#opr-unit').value.trim() || (type==='time' ? 'دقيقة' : 'وحدة');
+            const unit  = card.querySelector('#opr-unit').value.trim() || (type==='time' ? t('minutes') : t('unit_default'));
             const stepV = parseInt(card.querySelector('#opr-step').value);
-            if (!name) { new Notice('أدخل اسم المهمة'); return; }
-            if (total < 1) { new Notice('الهدف يجب أن يكون أكبر من صفر'); return; }
+            if (!name) { new Notice(t('enter_task_name')); return; }
+            if (total < 1) { new Notice(t('target_gt_zero')); return; }
             const newTask = {
                 id: uid(),
                 name,
@@ -631,7 +894,7 @@ class OmniNoteView extends ItemView {
         const active    = this.S.progressTasks.filter(t => !t.meta?.completed && !t.meta?.archived);
         const completed = this.S.progressTasks.filter(t =>  t.meta?.completed && !t.meta?.archived);
         if (!active.length && !completed.length) {
-            list.createDiv('omni-prog-empty').textContent = 'لا توجد مهام بعد';
+            list.createDiv('omni-prog-empty').textContent = t('no_tasks');
             return;
         }
 
@@ -640,7 +903,7 @@ class OmniNoteView extends ItemView {
         const renderItem = (task, isDone) => {
             const current = task.progress?.current ?? 0;
             const total   = task.config?.total ?? 1;
-            const unit    = task.config?.unit ?? 'وحدة';
+            const unit    = task.config?.unit ?? t('unit_default');
             const pct     = Math.min(100, Math.round((current / Math.max(total, 1)) * 100));
             const typeLbl = typeLabels[task.type] || '📊';
             const item    = list.createDiv(`omni-prog-item${isDone ? ' omni-prog-done' : ''}`);
@@ -660,12 +923,12 @@ class OmniNoteView extends ItemView {
     <button class="omni-step-btn omni-step-accent" data-id="${task.id}" data-a="inc">+</button>
   </div>
   <div class="omni-prog-side-btns">
-    <button class="omni-ghost-btn" data-id="${task.id}" data-a="set" title="إدخال يدوي">✏️</button>
-    <button class="omni-ghost-btn" data-id="${task.id}" data-a="done" title="اكتمل">✓</button>
-    <button class="omni-ghost-btn" data-id="${task.id}" data-a="del"  title="حذف">🗑</button>
+    <button class="omni-ghost-btn" data-id="${task.id}" data-a="set" title="${t('manual_input')}">✏️</button>
+    <button class="omni-ghost-btn" data-id="${task.id}" data-a="done" title="${t('status_done')}">✓</button>
+    <button class="omni-ghost-btn" data-id="${task.id}" data-a="del"  title="${t('delete')}">🗑</button>
   </div>` : `
-  <span class="omni-prog-pct omni-pct-done">✓ مكتمل — ${pct}%</span>
-  <button class="omni-ghost-btn" data-id="${task.id}" data-a="del" title="حذف">🗑</button>`}
+  <span class="omni-prog-pct omni-pct-done">${t('completed_status', pct)}</span>
+  <button class="omni-ghost-btn" data-id="${task.id}" data-a="del" title="${t('delete')}">🗑</button>`}
 </div>`;
             item.querySelectorAll('[data-a]').forEach(btn => {
                 btn.onclick = async () => {
@@ -685,8 +948,8 @@ class OmniNoteView extends ItemView {
                         t.progress.current = Math.max(0, t.progress.current - step);
                     }
                     if (a === 'set') {
-                        const unit = t.config?.unit ?? 'وحدة';
-                        const modal = new OmniInputModal(this.app, `إدخال يدوي — ${t.name}`, `أدخل التقدم الحالي (${unit}):`, String(t.progress.current), async (val) => {
+                        const unit = t.config?.unit ?? t('unit_default');
+                        const modal = new OmniInputModal(this.app, t('manual_input_title', t.name), t('manual_input_label', unit), String(t.progress.current), async (val) => {
                             const num = parseFloat(val);
                             if (!isNaN(num)) {
                                 t.progress.current = Math.max(0, Math.min(t.config.total, num));
@@ -722,7 +985,7 @@ class OmniNoteView extends ItemView {
 
         active.forEach(t => renderItem(t, false));
         if (completed.length) {
-            list.createDiv('omni-prog-sep').textContent = '— مكتملة —';
+            list.createDiv('omni-prog-sep').textContent = t('completed_tasks_sep');
             completed.forEach(t => renderItem(t, true));
         }
     }
@@ -743,16 +1006,32 @@ class OmniSettingsTab extends PluginSettingTab {
         const { containerEl: el } = this;
         el.empty();
         el.setAttribute('dir', 'rtl');
-        el.createEl('h2', { text: '⚙️ إعدادات OmniNote' });
+        el.createEl('h2', { text: t('settings_title') });
+
+        // Language
+        new Setting(el)
+            .setName(t('settings_lang'))
+            .setDesc(t('settings_lang_desc'))
+            .addDropdown(d => d
+                .addOption('ar', 'العربية (Arabic)')
+                .addOption('en', 'English')
+                .setValue(this.plugin.settings.language || 'ar')
+                .onChange(async v => {
+                    this.plugin.settings.language = v;
+                    setTranslationsLang(v);
+                    await this.plugin.saveSettings();
+                    this.display(); // re-render settings tab
+                    if (this.plugin._activeView) this.plugin._activeView._build(); // re-render view
+                }));
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  ١. البومودورو
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        this._section(el, '⏱️ البومودورو');
+        this._section(el, t('settings_pomo'));
 
         new Setting(el)
-            .setName('مدة العمل')
-            .setDesc('عدد الدقائق لكل جلسة عمل (١–١٢٠)')
+            .setName(t('work'))
+            .setDesc(t('pomo_work_desc'))
             .addText(t => t.setPlaceholder('25').setValue(String(this.plugin.settings.workDuration))
                 .onChange(async v => {
                     this.plugin.settings.workDuration = Math.max(1, Math.min(120, parseInt(v)||25));
@@ -760,8 +1039,8 @@ class OmniSettingsTab extends PluginSettingTab {
                 }));
 
         new Setting(el)
-            .setName('مدة الاستراحة')
-            .setDesc('عدد الدقائق للاستراحة القصيرة (١–٦٠)')
+            .setName(t('break'))
+            .setDesc(t('pomo_break_desc'))
             .addText(t => t.setPlaceholder('5').setValue(String(this.plugin.settings.shortBreak))
                 .onChange(async v => {
                     this.plugin.settings.shortBreak = Math.max(1, Math.min(60, parseInt(v)||5));
@@ -771,11 +1050,14 @@ class OmniSettingsTab extends PluginSettingTab {
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  ٢. الحكم والاقتباسات
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        this._section(el, '💡 الحكم والاقتباسات');
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  ٢. الحكم والاقتباسات
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        this._section(el, t('settings_quotes'));
 
         new Setting(el)
-            .setName('فترة إشعار الحكمة')
-            .setDesc('كل كم دقيقة تظهر حكمة في إشعارات ويندوز وتتقدم في الويدجت معاً')
+            .setName(t('quote_interval'))
+            .setDesc(t('quote_interval_desc'))
             .addText(t => t.setPlaceholder('30').setValue(String(this.plugin.settings.quoteInterval))
                 .onChange(async v => {
                     this.plugin.settings.quoteInterval = Math.max(1, parseInt(v)||30);
@@ -786,60 +1068,60 @@ class OmniSettingsTab extends PluginSettingTab {
         const qs = this.plugin.settings.quotes;
         const infoDiv = el.createDiv('omni-settings-note');
         infoDiv.innerHTML = `
-📊 إجمالي الحكم المحفوظة: <strong>${qs.length} حكمة</strong><br>
-🔖 الحكمة الحالية المعروضة: رقم <strong>${(this.plugin.settings.currentQuoteIdx % Math.max(qs.length,1))+1}</strong> من ${qs.length}`;
+${t('quote_total')} <strong>${qs.length} ${t('quote_quotes')}</strong><br>
+${t('quote_current')} <strong>${(this.plugin.settings.currentQuoteIdx % Math.max(qs.length,1))+1}</strong> ${t('quote_from')} ${qs.length}`;
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  ٣. استيراد / تصدير الحكم
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        this._section(el, '📂 استيراد / تصدير الحكم');
+        this._section(el, t('settings_import_export'));
 
         // استيراد (إضافة)
         new Setting(el)
-            .setName('استيراد حكم من ملف CSV')
-            .setDesc('تنسيق الملف: عمودان — نص الحكمة، ثم اسم الكاتب (يُضاف إلى القائمة الحالية)')
-            .addButton(btn => { btn.setButtonText('📥 استيراد وإضافة').setCta(); btn.onClick(() => this._pickCSV(false)); })
-            .addButton(btn => { btn.setButtonText('🔄 استيراد واستبدال'); btn.onClick(() => this._pickCSV(true)); });
+            .setName(t('import_csv'))
+            .setDesc(t('import_csv_desc'))
+            .addButton(btn => { btn.setButtonText(t('import_add')).setCta(); btn.onClick(() => this._pickCSV(false)); })
+            .addButton(btn => { btn.setButtonText(t('import_replace')); btn.onClick(() => this._pickCSV(true)); });
 
         // تصدير
         new Setting(el)
-            .setName('تصدير الحكم إلى ملف CSV')
-            .setDesc('تنزيل جميع الحكم المحفوظة كملف CSV يمكن تعديله وإعادة استيراده')
+            .setName(t('export_csv'))
+            .setDesc(t('export_csv_desc'))
             .addButton(btn => {
-                btn.setButtonText('📤 تصدير CSV');
+                btn.setButtonText(t('export_btn'));
                 btn.onClick(() => {
-                    if (!qs.length) { new Notice('لا توجد حكم للتصدير'); return; }
+                    if (!qs.length) { new Notice(t('export_empty')); return; }
                     const csv  = buildCSV(qs);
                     const blob = new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8;' });
                     const url  = URL.createObjectURL(blob);
                     const a    = Object.assign(document.createElement('a'), { href:url, download:`omni-quotes-${fmtDate(new Date())}.csv` });
                     document.body.appendChild(a); a.click();
                     document.body.removeChild(a); URL.revokeObjectURL(url);
-                    new Notice(`✅ تم تصدير ${qs.length} حكمة`);
+                    new Notice(t('export_done', qs.length));
                 });
             });
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  ٤. إضافة حكمة يدوياً
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        this._section(el, '✍️ إضافة حكمة يدوياً');
+        this._section(el, t('settings_add_quote'));
 
         const manualDiv = el.createDiv();
         manualDiv.style.cssText = 'display:flex;flex-direction:column;gap:10px;padding:12px;background:var(--background-secondary);border-radius:8px;margin-bottom:8px;';
-        const qTextInp = manualDiv.createEl('textarea', { placeholder:'نص الحكمة...' });
+        const qTextInp = manualDiv.createEl('textarea', { placeholder:t('quote_ph') });
         qTextInp.style.cssText = 'width:100%;height:64px;direction:rtl;resize:vertical;';
-        const qAuthInp = manualDiv.createEl('input', { type:'text', placeholder:'المؤلف (اختياري)...' });
+        const qAuthInp = manualDiv.createEl('input', { type:'text', placeholder:t('author_ph') });
         qAuthInp.style.cssText = 'width:100%;direction:rtl;';
-        const addBtn = manualDiv.createEl('button', { text:'+ إضافة الحكمة' });
+        const addBtn = manualDiv.createEl('button', { text:t('add_quote_btn') });
         addBtn.classList.add('mod-cta');
         addBtn.onclick = async () => {
             const text   = qTextInp.value.trim();
-            const author = qAuthInp.value.trim() || 'مجهول';
-            if (!text) { new Notice('يرجى كتابة نص الحكمة'); return; }
+            const author = qAuthInp.value.trim() || t('unknown_author');
+            if (!text) { new Notice(t('empty_quote_text')); return; }
             this.plugin.settings.quotes.push({ text, author });
             await this.plugin.saveSettings();
             qTextInp.value = ''; qAuthInp.value = '';
-            new Notice('✅ تمت إضافة الحكمة');
+            new Notice(t('quote_added'));
             if (this.plugin._activeView) this.plugin._activeView.updateQuoteDisplay(this.plugin.getCurrentQuote());
             this.display();
         };
@@ -847,10 +1129,10 @@ class OmniSettingsTab extends PluginSettingTab {
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  ٥. قائمة الحكم الحالية
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        this._section(el, '📋 قائمة الحكم الحالية');
+        this._section(el, t('settings_quote_list'));
 
         if (!qs.length) {
-            el.createDiv('omni-settings-note').textContent = 'لا توجد حكم محفوظة بعد. أضف حكماً يدوياً أو استورد من CSV.';
+            el.createDiv('omni-settings-note').textContent = t('no_quotes_list');
         } else {
             const tableWrap = el.createDiv();
             tableWrap.style.cssText = 'max-height:320px;overflow-y:auto;border:1px solid var(--background-modifier-border);border-radius:8px;margin-top:8px;';
@@ -858,7 +1140,7 @@ class OmniSettingsTab extends PluginSettingTab {
             table.style.cssText = 'width:100%;border-collapse:collapse;font-size:0.85em;';
             const hr = table.createEl('thead').createEl('tr');
             hr.style.background = 'var(--background-secondary-alt)';
-            ['#','الحكمة','المؤلف','إجراءات'].forEach(h => {
+            [t('th_num'), t('th_quote'), t('th_author'), t('th_actions')].forEach(h => {
                 const th = hr.createEl('th', { text:h });
                 th.style.cssText = 'padding:8px 10px;text-align:right;';
             });
@@ -884,11 +1166,11 @@ class OmniSettingsTab extends PluginSettingTab {
                 actTd.style.cssText = 'padding:4px 10px;text-align:center;white-space:nowrap;';
 
                 const editBtn = actTd.createEl('button', { text:'✏️' });
-                editBtn.title = 'تعديل';
+                editBtn.title = t('edit');
                 editBtn.style.cssText = 'padding:2px 6px;cursor:pointer;margin-left:4px;';
 
                 const delBtn = actTd.createEl('button', { text:'🗑' });
-                delBtn.title = 'حذف';
+                delBtn.title = t('delete');
                 delBtn.style.cssText = 'padding:2px 6px;cursor:pointer;';
 
                 // ── صف التعديل (مخفي بالبداية) ──
@@ -907,10 +1189,10 @@ class OmniSettingsTab extends PluginSettingTab {
                 eAuth.style.cssText = 'width:100%;direction:rtl;font-size:0.9em;padding:5px 8px;border-radius:4px;border:1px solid var(--background-modifier-border);background:var(--background-primary);color:var(--text-normal);';
                 const eBtns = editWrap.createDiv();
                 eBtns.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;';
-                const eSave = eBtns.createEl('button', { text:'💾 حفظ' });
+                const eSave = eBtns.createEl('button', { text:t('save') });
                 eSave.classList.add('mod-cta');
                 eSave.style.cssText = 'padding:4px 14px;cursor:pointer;font-size:0.85em;';
-                const eCancel = eBtns.createEl('button', { text:'إلغاء' });
+                const eCancel = eBtns.createEl('button', { text:t('cancel') });
                 eCancel.style.cssText = 'padding:4px 14px;cursor:pointer;font-size:0.85em;';
 
                 // منطق الأزرار
@@ -922,11 +1204,11 @@ class OmniSettingsTab extends PluginSettingTab {
                 eCancel.onclick = () => { editRow.style.display = 'none'; };
                 eSave.onclick = async () => {
                     const newText = eText.value.trim();
-                    const newAuth = eAuth.value.trim() || 'مجهول';
-                    if (!newText) { new Notice('نص الحكمة لا يمكن أن يكون فارغاً'); return; }
+                    const newAuth = eAuth.value.trim() || t('unknown_author');
+                    if (!newText) { new Notice(t('empty_quote_text')); return; }
                     this.plugin.settings.quotes[idx] = { text: newText, author: newAuth };
                     await this.plugin.saveSettings();
-                    new Notice('✅ تم تعديل الحكمة');
+                    new Notice(t('quote_edited'));
                     if (this.plugin._activeView) this.plugin._activeView.updateQuoteDisplay(this.plugin.getCurrentQuote());
                     this.display();
                 };
@@ -935,7 +1217,7 @@ class OmniSettingsTab extends PluginSettingTab {
                     if (this.plugin.settings.currentQuoteIdx >= this.plugin.settings.quotes.length)
                         this.plugin.settings.currentQuoteIdx = Math.max(0, this.plugin.settings.quotes.length-1);
                     await this.plugin.saveSettings();
-                    new Notice('تم حذف الحكمة');
+                    new Notice(t('quote_deleted'));
                     if (this.plugin._activeView) this.plugin._activeView.updateQuoteDisplay(this.plugin.getCurrentQuote());
                     this.display();
                 };
@@ -945,11 +1227,11 @@ class OmniSettingsTab extends PluginSettingTab {
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  ٦. الإشعارات
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        this._section(el, '🔔 الإشعارات');
+        this._section(el, t('settings_notifs'));
 
         new Setting(el)
-            .setName('تفعيل إشعارات Milestones')
-            .setDesc('إظهار إشعار عند الوصول إلى 25% — 50% — 75% — 100% من أي مهمة')
+            .setName(t('milestone_enable'))
+            .setDesc(t('milestone_enable_desc'))
             .addToggle(t => t
                 .setValue(this.plugin.settings.enableMilestoneNotifications)
                 .onChange(async v => {
@@ -960,12 +1242,12 @@ class OmniSettingsTab extends PluginSettingTab {
 
         if (this.plugin.settings.enableMilestoneNotifications) {
             new Setting(el)
-                .setName('مصدر إشعارات Milestones')
-                .setDesc('حدد أين تود أن تظهر لك هذه الإشعارات؟')
+                .setName(t('milestone_src'))
+                .setDesc(t('milestone_src_desc'))
                 .addDropdown(d => d
-                    .addOption('windows', 'ويندوز (النظام) فقط')
-                    .addOption('obsidian', 'أوبسيديان (داخلي) فقط')
-                    .addOption('both', 'كلاهما (ويندوز + أوبسيديان)')
+                    .addOption('windows', t('src_win'))
+                    .addOption('obsidian', t('src_obs'))
+                    .addOption('both', t('src_both'))
                     .setValue(this.plugin.settings.milestoneNotificationType)
                     .onChange(async v => {
                          this.plugin.settings.milestoneNotificationType = v;
@@ -974,7 +1256,7 @@ class OmniSettingsTab extends PluginSettingTab {
 
             const msgsBox = el.createDiv();
             msgsBox.style.cssText = 'display:flex;flex-direction:column;gap:12px;padding:12px;background:var(--background-secondary);border-radius:8px;margin-bottom:12px;margin-top:8px;';
-            msgsBox.createEl('span', { text: '💬 نصوص إشعارات الإنجاز المخصصة' }).style.cssText = 'color: var(--text-accent); font-weight: bold; margin-bottom: 4px; font-size: 1.05em;';
+            msgsBox.createEl('span', { text: t('milestone_msgs') }).style.cssText = 'color: var(--text-accent); font-weight: bold; margin-bottom: 4px; font-size: 1.05em;';
             
             const msgGrid = msgsBox.createDiv();
             msgGrid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;';
@@ -982,7 +1264,7 @@ class OmniSettingsTab extends PluginSettingTab {
             [25, 50, 75, 100].forEach(p => {
                 const item = msgGrid.createDiv();
                 item.style.cssText = 'display:flex;flex-direction:column;gap:6px;';
-                item.createEl('span', { text: `رسالة الإنجاز عند ${p}%` }).style.cssText = 'font-size: 0.9em; color: var(--text-normal); font-weight: 500;';
+                item.createEl('span', { text: t('milestone_msg_at', p) }).style.cssText = 'font-size: 0.9em; color: var(--text-normal); font-weight: 500;';
                 
                 const ta = item.createEl('textarea');
                 ta.value = this.plugin.settings.milestoneMessages[p];
@@ -999,9 +1281,8 @@ class OmniSettingsTab extends PluginSettingTab {
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         //  ٧. مجلد البيانات
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        this._section(el, '💾 مجلد البيانات');
-        el.createDiv('omni-settings-note').innerHTML =
-            `تُحفظ السجلات اليومية تلقائياً في:<br><code>${DATA_DIR}/YYYY-MM-DD.md</code> داخل الـ vault`;
+        this._section(el, t('settings_data_dir'));
+        el.createDiv('omni-settings-note').innerHTML = t('data_dir_desc', DATA_DIR);
     }
 
     _section(el, title) {
@@ -1020,19 +1301,19 @@ class OmniSettingsTab extends PluginSettingTab {
             if (!file) return;
             try {
                 const parsed = parseCSV(await file.text());
-                if (!parsed.length) { new Notice('⚠️ لم يُعثر على حكم في الملف'); return; }
+                if (!parsed.length) { new Notice(t('file_no_quotes')); return; }
                 if (replace) {
                     this.plugin.settings.quotes = parsed;
                     this.plugin.settings.currentQuoteIdx = 0;
-                    new Notice(`✅ تم استبدال الحكم بـ ${parsed.length} حكمة جديدة`);
+                    new Notice(t('file_replaced', parsed.length));
                 } else {
                     this.plugin.settings.quotes = [...this.plugin.settings.quotes, ...parsed];
-                    new Notice(`✅ تم إضافة ${parsed.length} حكمة جديدة`);
+                    new Notice(t('file_added', parsed.length));
                 }
                 await this.plugin.saveSettings();
                 if (this.plugin._activeView) this.plugin._activeView.updateQuoteDisplay(this.plugin.getCurrentQuote());
                 this.display();
-            } catch (_) { new Notice('⚠️ خطأ في قراءة الملف'); }
+            } catch (_) { new Notice(t('file_error')); }
         };
     }
 }
@@ -1046,6 +1327,7 @@ class OmniNotePlugin extends Plugin {
 
     async onload() {
         await this.loadSettings();
+        setTranslationsLang(this.settings.language || 'ar');
         this.registerView(VIEW_TYPE_OMNI, leaf => new OmniNoteView(leaf, this));
         this.addRibbonIcon('calendar-clock', 'OmniNote', () => this.activateView());
         this.addCommand({ id:'open-omni-view', name:'افتح OmniNote', callback:() => this.activateView() });
@@ -1088,7 +1370,7 @@ class OmniNotePlugin extends Plugin {
         this._qTimer = window.setInterval(async () => {
             if (this.settings.isQuotePaused) return; // لا تغير الحكمة إذا كانت متوقفة
             const q = await this.advanceQuote();
-            sendNotif('💡 حكمة اليوم — OmniNote', `"${escapeHTML(q.text)}" — ${escapeHTML(q.author)}`, true);
+            sendNotif(t('quote_title') + ' — OmniNote', `"${escapeHTML(q.text)}" — ${escapeHTML(q.author)}`, true);
         }, ms);
         this.registerInterval(this._qTimer);
     }
@@ -1105,9 +1387,9 @@ class OmniNotePlugin extends Plugin {
     async _doNotifCheck() {
         const now     = Date.now();
         const windows = [
-            { key:'h2',  ms: 2*60*60*1000, label:'بعد ساعتين'  },
-            { key:'h12', ms:12*60*60*1000, label:'بعد 12 ساعة' },
-            { key:'h24', ms:24*60*60*1000, label:'بعد 24 ساعة' },
+            { key:'h2',  ms: 2*60*60*1000, label:t('notif_due_2h')  },
+            { key:'h12', ms:12*60*60*1000, label:t('notif_due_12h') },
+            { key:'h24', ms:24*60*60*1000, label:t('notif_due_24h') },
         ];
         let dirty = false;
         for (const [ds, tasks] of Object.entries(this.settings.calendarTasks || {})) {
@@ -1130,7 +1412,7 @@ class OmniNotePlugin extends Plugin {
                     }
                 }
                 if (toNotify) {
-                    sendNotif('📅 تذكير — OmniNote', `"${task.text}" مستحقة ${toNotify.label}`);
+                    sendNotif(t('notif_reminder'), t('notif_reminder_body', task.text, toNotify.label));
                 }
             }
         }
@@ -1158,12 +1440,14 @@ class OmniNotePlugin extends Plugin {
             const adapter  = this.app.vault.adapter;
             let content = await adapter.exists(filePath)
                 ? await adapter.read(filePath)
-                : `# إحصائيات يوم ${today}\n\n`;
+                : `# ${t('stats_header')} ${today}\n\n`;
             const timeStr  = new Date().toLocaleTimeString('ar-EG', { hour:'2-digit', minute:'2-digit' });
-            const newRow   = `| ${timeStr} | ${escapeHTML(entry.note||'بدون ملاحظة')} | ${entry.duration} دقيقة | ${entry.type==='work'?'عمل':'استراحة'} |\n`;
-            const pomoHeader = '## سجل البومودورو\n| الوقت | الملاحظة | المدة | النوع |\n| :--- | :--- | :--- | :--- |\n';
-            if (content.includes('## سجل البومودورو')) {
-                const nextIdx = content.indexOf('\n## ', content.indexOf('## سجل البومودورو')+5);
+            const newRow   = `| ${timeStr} | ${escapeHTML(entry.note||t('no_note'))} | ${entry.duration} دقيقة | ${entry.type==='work'?t('work'):t('break')} |\n`;
+            const pomoHeader = t('pomo_log_header');
+            if (content.includes('## سجل البومودورو') || content.includes(t('pomo_title'))) {
+                // If finding in english, fallback might need a stricter regex, but keeping simple for now.
+                const searchTxt = content.includes('## سجل البومودورو') ? '## سجل البومودورو' : t('pomo_log_header').split('\n')[0];
+                const nextIdx = content.indexOf('\n## ', content.indexOf(searchTxt)+5);
                 content = nextIdx !== -1
                     ? content.substring(0,nextIdx).trimEnd()+'\n'+newRow+content.substring(nextIdx)
                     : content.trimEnd()+'\n'+newRow;
@@ -1182,22 +1466,23 @@ class OmniNotePlugin extends Plugin {
             const filePath = `${DATA_DIR}/${today}.md`;
             let content = await adapter.exists(filePath)
                 ? await adapter.read(filePath)
-                : `# إحصائيات يوم ${today}\n`;
-            let taskSummary = '| المهمة | الإنجاز | النسبة | الحالة |\n| :--- | :--- | :--- | :--- |\n';
-            this.settings.progressTasks.filter(t => !t.meta?.archived || t.meta?.archivedDate===today).forEach(t => {
-                const current = t.progress?.current ?? 0;
-                const total   = t.config?.total ?? 1;
-                const unit    = t.config?.unit ?? 'وحدة';
+                : `# ${t('stats_header')} ${today}\n`;
+            let taskSummary = t('prog_log_header');
+            this.settings.progressTasks.filter(t => !t.meta?.archived || t.meta?.archivedDate===today).forEach(tsk => {
+                const current = tsk.progress?.current ?? 0;
+                const total   = tsk.config?.total ?? 1;
+                const unit    = tsk.config?.unit ?? t('unit_default');
                 const pct     = Math.min(100, Math.round((current / Math.max(total, 1)) * 100));
-                const status  = t.meta?.completed ? '✅ مكتملة' : '⏳ جارية';
-                taskSummary  += `| ${escapeHTML(t.name)} | ${escapeHTML(String(current))}/${escapeHTML(String(total))} ${escapeHTML(unit)} | ${pct}% | ${status} |\n`;
+                const status  = tsk.meta?.completed ? t('status_done') : t('status_running');
+                taskSummary  += `| ${escapeHTML(tsk.name)} | ${escapeHTML(String(current))}/${escapeHTML(String(total))} ${escapeHTML(unit)} | ${pct}% | ${status} |\n`;
             });
             const timeStr     = new Date().toLocaleTimeString('ar-EG', { hour:'2-digit', minute:'2-digit' });
-            const fullSection = `## متابعة الإنجاز (تحديث: ${timeStr})\n\n${taskSummary}\n`;
+            const fullSection = t('prog_header', timeStr) + taskSummary + '\n';
             const progressRegex = /## متابعة الإنجاز(?:.*\n)+?(?=\n## |\Z)/;
-            content = progressRegex.test(content)
-                ? content.replace(progressRegex, fullSection)
-                : content.trimEnd()+'\n\n'+fullSection;
+            const progressEnRegex = /## Progress Tracker(?:.*\n)+?(?=\n## |\Z)/;
+            if (progressRegex.test(content)) content = content.replace(progressRegex, fullSection);
+            else if (progressEnRegex.test(content)) content = content.replace(progressEnRegex, fullSection);
+            else content = content.trimEnd()+'\n\n'+fullSection;
             await adapter.write(filePath, content);
         } catch (e) { console.error('OmniNote: Failed to write progress:', e); }
     }
@@ -1264,8 +1549,8 @@ class OmniNotePlugin extends Plugin {
         });
         if (highest > 0) {
             const notifType = this.settings.milestoneNotificationType || 'windows';
-            const title = `📊 OmniNote — ${t.name} (${highest}%)`;
-            const body = msgs[highest] || `وصلت إلى ${highest}%`;
+            const title = t('milestone_notif_title', t.name, highest);
+            const body = msgs[highest] || t('milestone_reached', highest);
             
             try {
                 if (notifType === 'obsidian' || notifType === 'both') {
